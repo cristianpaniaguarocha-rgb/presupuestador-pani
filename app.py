@@ -50,7 +50,7 @@ if uploaded_file:
             with st.spinner("Gemini está contando los muebles..."):
                 try:
                     # Usamos el nombre de modelo corregido
-                    model = genai.GenerativeModel('gemini-1.5-flash')
+                    model = genai.GenerativeModel('gemini-pro-vision')
                     prompt = "Analiza esta imagen de cocina. Lista los muebles bajos, altos y columnas que veas."
                     response = model.generate_content([prompt, img])
                     st.subheader("2. Despiece detectado (Editable)")
