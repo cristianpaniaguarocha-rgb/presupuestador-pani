@@ -37,20 +37,43 @@ if uploaded_file:
             st.error("Falta la API Key")
         else:
             try:
-                # Esta es la forma más moderna de llamar al modelo
-                model = genai.GenerativeModel(model_name="gemini-1.5-flash")
-                response = model.generate_content([
-                    "Sos un experto carpintero. Listá los muebles de esta cocina para un presupuesto.", 
-                    img
-                ])
+                # LA SOLUCIÓN: Usar el método generativo directo
+                model = genai.GenerativeModel('gemini-1.5-flash')
+                
+                # En las versiones nuevas, se recomienda pasar la imagen así
+                response = model.generate_content(
+                    contents=[
+                        "Sos un experto carpintero. Listá los muebles de esta cocina para un presupuesto detallado.",
+                        img
+                    ]
+                )
+                
                 st.subheader("Resultado:")
-                st.write(response.text)
+                if response.text:
+                    st.write(response.text)
+                else:
+                    st.warning("La IA no devolvió texto. Revisa la imagen.")
+                    
             except Exception as e:
-                st.error(f"Error técnico: {e}")
+                # Si esto falla, probamos el último recurso de nombre
+                st.info("Reintentando con ruta alternativa...")
+                try:
+                    model_alt = genai.GenerativeModel('models/gemini-1.5-flash')
+                    res = model_alt.generate_content(["Analiza la cocina", img])
+                    st.write(res.text)
+                except:
+                    st.error(f"Error técnico persistente: {e}")
 
-# --- CHECKLIST ---
+# --- CHECKLIST (Basado en tu PDF) ---
 st.divider()
 st.header("📋 Checklist de Seguridad")
-opciones = ["Patas", "Zócalos", "Copetes", "Bisagras", "Tiradores", "Mano de Obra"]
-for opt in opciones:
-    st.checkbox(opt)
+# Sacado de tu despiece página 3
+col1, col2 = st.columns(2)
+with col1:
+    st.checkbox("Patas (Bolsa x4)") # [cite: 77]
+    st.checkbox("Zócalo y Pinzas") # [cite: 50, 51]
+    st.checkbox("Copete (Rinconero/Esquinero)") # [cite: 58, 59, 60]
+with col2:
+    st.checkbox("Bisagras (Normal/180°)") # [cite: 75, 76]
+    st.checkbox("Cajones Plastimodul") # [cite: 65]
+    st.checkbox("Mano de Obra (M.O.)") # [cite: 41]
