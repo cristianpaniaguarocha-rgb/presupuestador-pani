@@ -53,7 +53,7 @@ if uploaded_file:
         else:
             with st.spinner("Gemini está contando los muebles..."):
                 # Aquí configuramos a Gemini 1.5 Pro
-                model = genai.GenerativeModel('gemini-1.5-flash')
+               model = genai.GenerativeModel('models/gemini-1.5-flash')
                 prompt = """Analiza esta imagen técnica de una cocina. 
                 Necesito que listes los módulos de izquierda a derecha. 
                 Diferencia entre: Mueble bajo cajonera, Mueble bajo puerta, Lavadora, Fregadero, Columna Horno y Muebles Altos.
